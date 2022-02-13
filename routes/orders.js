@@ -68,4 +68,33 @@ router.get('/listjson', async function(req, res) {
 });
 
 
+// /order/delete
+
+// http://localhost:4000/orders/delete?id=1 // req.query.id
+// http://localhost:4000/orders/delete/1 // req.params.id
+
+router.get('/delete', async function (req, res) {
+    
+    await TestOrder.destroy({ where: { id: req.query.id } }).then((deleted) => {
+        if (deleted === 1) {
+            res.render('orders/deleted',
+                {
+                    title: 'Express 002 - Orders delete page',
+                    // list: getOrders()
+                    message: `You deleted order with id: ${req.query.id}`
+                });
+        }
+    },
+        (error) => {
+            res.render('orders/deleted',
+                {
+                    title: 'Express 002 - Orders delete page',
+                    // list: getOrders()
+                    message: `<div><p>There was an error deleting order with id: ${req.query.id}</p>
+                                   <p>Error: ${error}</p></div>`
+                });
+        });
+
+});
+
 module.exports = router;
